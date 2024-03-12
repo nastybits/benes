@@ -1,27 +1,35 @@
-import { getRandomInt, makeRandomIntArray, makeRandomStrArray } from "./utils.mjs"
+/**
+ * Получения кол-ва элементов в массиве удовлетворяющих условие
+ * Сравниваются методы filter и reduce
+ */
 
-const arraysCount = 500 // Количество гененрируемых массивов для подсчета
+import { makeRandomIntArray } from "./utils.mjs"
+
+const arraysCount = 1                       // Количество гененрируемых массивов для подсчета
+const elementsCount = 10000                 // Количество элементов в массиве
+const filterFunction = (el) => el % 2 === 0 // Функция фильтрации
+
 const arrays = []
 
 for (let i = 0; i < arraysCount; i++) {
-  arrays.push(makeRandomIntArray(getRandomInt(1, 100)))
+  arrays.push(makeRandomIntArray(elementsCount))
 }
 
 const start = performance.now()
 
 let count = 0
 
-/**
- * Получения кол-ва элементов в массиве удовлетворяющих условие
- * Сравниваются методы filter и reduce
- */
-
 arrays.forEach(arr => {
-  // Использование filter (~ 0.4 - 0.6 ms)
-  // count += arr.filter(i => i > 50).length
+  // Использование filter (~ 0.36)
+  // count += arr.filter(i => filterFunction(i)).length
 
-  // Использование reduce (~ 0.38 - 0.5 ms)
-  // count += arr.reduce((n, i) => i > 50 ? n + 1 : n, 0)
+  // Использование reduce (~ 0.31)
+  // count += arr.reduce((n, i) => filterFunction(i) ? n + 1 : n, 0)
+
+  count = 0
+  arr.forEach(el => {
+    if (filterFunction(el)) count++
+  })
 })
 
 console.log(performance.now() - start, "res: " + count)
