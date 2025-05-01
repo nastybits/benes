@@ -5,7 +5,6 @@
  */
 
 /**
- * 
  * @param {*} arr
  * @param {*} ids
  * @returns 
@@ -43,6 +42,6 @@ for (let i = 0; i <= 10000; i++) {
 }
 
 const start = performance.now()
-const count = getCountByLoop(arr, ids)
+const count = getCountByFilter(arr, ids)
 
-console.log(performance.now() - start, "res: " + count)
+console.log(performance.now() - start)

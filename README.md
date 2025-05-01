@@ -7,7 +7,7 @@ npm install jsvu -g
 ```
 #### Linux/Mac:
 ```bash
- export PATH="${HOME}/.jsvu/bin:${PATH}"
+export PATH="${HOME}/.jsvu/bin:${PATH}"
 ```
 
 #### Windows:
@@ -22,7 +22,7 @@ npm install jsvu -g
 ## Команды запуска:
 ```bash
 v8 --print-bytecode "var a = 123"; # Вывести байткод в консоль
-v8 --print-bytecode [file] # Вывести байткод файла в консоль
+v8 --print-bytecode <file> # Вывести байткод файла в консоль
 ```
 
 ### Фильтры
