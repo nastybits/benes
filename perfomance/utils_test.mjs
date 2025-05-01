@@ -1,9 +1,15 @@
 import * as utils from "./utils.mjs"
 
-console.log(utils.getRandomInt(0, 100))
 
-console.log(utils.getRandomStr())
+const a = new Promise((resolve, reject) => {
+        setTimeout(() => { reject("Error") }, 500)
+    })
 
-console.log(utils.makeRandomIntArray(10))
+async function test() {
+    const z = await a.then(response => response).catch(e => console.log(e))
 
-console.log(utils.makeRandomStrArray(10))
+    console.log(z)
+    return z
+}
+
+test()

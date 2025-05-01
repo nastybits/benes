@@ -1,22 +1,34 @@
 # JSVU + V8 Engine
 
-## Установка JSVU для Windows 11:
-
+### Установка JSVU:
 Для установки требуется Node.js v18+
-Выполнить в консоли
-`npm install jsvu -g`
+```bash
+npm install jsvu -g
+```
+#### Linux/Mac:
+```bash
+ export PATH="${HOME}/.jsvu/bin:${PATH}"
+```
 
-Добавить папку `C:\Users\%USERNAME%\.jsvu\bin` в переменную среды (PATH)
+#### Windows:
+Добавить папку `C:\Users\%USERNAME%\.jsvu\bin` в переменную среды `PATH`
+
+Запустить установщик:
+```bash
+ jsvu
+```
+Пройти интереактивный диалог для установки нужных движков. В этом readme будут приведены команды для `V8`
 
 ## Команды запуска:
-
-`v8 --print-bytcode "var a = 123;"` - Вывести байткод в консоль
-`v8 --print-bytcode [file]` -  - Вывести байткод файла в консоль
+```bash
+v8 --print-bytecode "var a = 123"; # Вывести байткод в консоль
+v8 --print-bytecode [file] # Вывести байткод файла в консоль
+```
 
 ### Фильтры
-
-`v8 --print-bytcode --print-bytecode-filter=[param]` - Вывести байткод с фильтрацией
-
+```bash
+v8 --print-bytecode --print-bytecode-filter=[param] # Вывести байткод с фильтрацией
+```
 Параметры фильтров
 
 `*` - Вывести байткод для всего

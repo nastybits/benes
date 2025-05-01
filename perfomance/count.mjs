@@ -33,3 +33,11 @@ arrays.forEach(arr => {
 })
 
 console.log(performance.now() - start, "res: " + count)
+
+const t = []
+t.push()
+t.push()
+t.push()
+t.push()
+
+console.log(t)
