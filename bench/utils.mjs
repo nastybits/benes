@@ -24,15 +24,15 @@ export function getRandomStr() {
 
 /**
  * Получение массива случайных целых чисел
- * @param {Number} amount - количество элементов
+ * @param {Number} len - количество элементов
  * @param {Number} min - минимальное значение для случайного целого
  * @param {Number} max - максимальное значение для случайного целого
  * @returns {[Number]}
  */
-export function makeRandomIntArray(amount = 10_000, min = 0, max = 100) {
+export function makeRandomIntArray(len = 10_000, min = 0, max = 100) {
   const arr = []
 
-  for (let i = 0; i < amount; i++) {
+  for (let i = 0; i < len; i++) {
     arr.push(getRandomInt(min, max))
   }
 
@@ -41,13 +41,13 @@ export function makeRandomIntArray(amount = 10_000, min = 0, max = 100) {
 
 /**
  * Получение массива случайных строк
- * @param {Number} amount - количество элементов
+ * @param {Number} len - количество элементов
  * @returns {[Strtng]}
  */
-export function makeRandomStrArray(amount = 10_000) {
+export function makeRandomStrArray(len = 10_000) {
   const arr = []
   
-  for (let i = 0; i < amount; i++) {
+  for (let i = 0; i < len; i++) {
     arr.push(getRandomStr())
   }
 
