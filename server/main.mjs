@@ -1,55 +1,60 @@
 #!/usr/bin/env node
+
 /**
- * Запуск:
- * node bench.mjs <file> [runs] [-q]
- *
- *   <file> — путь к JS-файлу, который выполняется командой `v8`
- *   [runs] — количество прогонов (по умолчанию 10)
- *   -q     — выводить только итог (время каждого прогона скрыто)
+ * Запуск: node bench.mjs <dir> [runs] [-p] [-q]
  */
 
-import { runOnce } from "./utils/runOnce.mjs"
-import { printProgress } from "./utils/printProgress.mjs"
-import { resolve as resolvePath } from "path"
+import { scanDir, benchFile, parseArgs, showHelp } from "./utils/index.js"
 
-const argv = process.argv.slice(2)
-if (argv.length === 0) {
-  console.error("Usage: node bench.mjs <file> [runs] [-q]")
-  process.exit(1)
-}
-
-const quiet = argv.includes("-q")
-if (quiet) {
-  argv.splice(argv.indexOf("-q"), 1)
-}
-
-const PRECITION = 5
-const RUNS_DEFAULT = 10
-
-const filePath = resolvePath(process.cwd(), argv[0])
-const runs = Number(argv[1] || RUNS_DEFAULT)
-const times = []
-
-for (let i = 0; i <= runs; i++) {
+async function main() {
+  let args
   try {
-    const t = await runOnce(filePath)
-    times.push(t)
-
-    quiet
-      ? printProgress(i, runs)
-      : console.log(`Run ${i}/${runs}: ${t.toFixed(PRECITION)} ms`)
+    args = parseArgs(process.argv)
   } catch (e) {
-    console.error(`\n${e.message}`)
+    console.error(e.message)
     process.exit(1)
   }
+
+  const { dir, runs, quiet, precision, help } = args
+
+  if (help) {
+    showHelp()
+    process.exit(1)
+  }
+
+  const files = await scanDir(dir)
+
+  if (files.length === 0) {
+    console.error(`No .js files found in "${dir}"`)
+    process.exit(1)
+  }
+
+  console.log(`-------- Test: ${dir} ----------`)
+  const results = []
+  for (const file of files) {
+    try {
+      const times = await benchFile(file, runs)
+      const average = times.reduce((s, n) => s + n, 0) / times.length
+      results.push({ ...file, times, avg: average.toFixed(precision) })
+    } catch (e) {
+      console.error(`${file.label}: ${e.message}`)
+      process.exit(1)
+    }
+  }
+
+  results.sort((a, b) => a.avg - b.avg)
+
+  if (!quiet) {
+    results.forEach(el => {
+      console.log(`Runs ${el.label}:`)
+      el.times.forEach((time, i) => console.log(`  ${el.label} (${i}/${runs}): ${time}`))
+      console.log("------------------------")
+    })
+  }
+
+  console.log("---- Average Results -----")
+  results.forEach(el => console.log(`${el.label}: ${el.avg}`))
+  console.log("--------------------------")
 }
 
-if (quiet) {
-  process.stdout.write("\n")
-}
-
-const avg = (times.reduce((s, n) => s + n, 0) / times.length).toFixed(PRECITION)
-console.log(`────────────────────────
-Average (${runs} runs): ${avg} ms
-────────────────────────`
-)
+main()
