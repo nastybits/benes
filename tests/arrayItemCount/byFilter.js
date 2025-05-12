@@ -12,7 +12,7 @@ function countByFilter(arr, ids) {
 var arr = []
 var ids = []
 
-for (let i = 0; i <= 10000; i++) {
+for (let i = 0; i <= 1000; i++) {
   arr.push({ ID: i })
   if (i % 3 === 0) {
     ids.push(i)

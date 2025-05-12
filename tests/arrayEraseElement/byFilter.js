@@ -10,6 +10,7 @@ function getElementByFilter(arr, id) {
 }
 
 var arr = []
+
 for (let i = 0; i <= 10000; i++) {
   arr.push({ ID: i })
 }
