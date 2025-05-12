@@ -12,33 +12,33 @@ export const FLAGS = Object.freeze({
     aliases: ["-h", "--help"],
     type: "boolean",
     default: false,
-    description: "Показать это сообщение"
+    description: "Show this message"
   },
   engine: {
     aliases: ["-e", "--engine"],
     type: "sting",
     default: "v8",
-    description: "Используемый движок",
+    description: "Name of JS Engine to use",
     validate: (e) => ["v8", "spidermonkey", "javascriptcore", "graaljs", "quickjs", "hermes", "xs"].includes(e)
   },
   runs: {
     aliases: ["-r", "--runs"],
     type: "number",
     default: 100,
-    description: "Количество прогонов",
+    description: "Amount of runs for each file",
     validate: (r) => r && r >= 1
   },
   precision: {
     aliases: ["-p", "--precision"],
     type: "number",
     default: 5,
-    description: "Точность измерения в знаках после запятой"
+    description: "Time precision in decimal places"
   },
   all: {
     aliases: ["-a", "--all"],
     type: "boolean",
     default: false,
-    description: "Показать вывод каждого прогона"
+    description: "Show time for each run"
   }
 
   // При необходимости добавляйте новые флаги:

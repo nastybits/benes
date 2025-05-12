@@ -47,7 +47,7 @@ export function parseArgs(argv, params) {
   const dir = args[0]
 
   if (!dir || flags.help) {
-    printHelp(params, "node bench.mjs <dir> [-h] [-r N] [-p N] [-a]\ndir: Путь к директории с файлами для тестов")
+    printHelp(params, "node ./bench <dir> [-h] [-e S] [-r N] [-p N] [-a]")
     process.exit(1)
   }
 

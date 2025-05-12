@@ -2,11 +2,21 @@
  * Показывает сообщение help
  */
 export function printHelp(params, description) {
-  console.log(description)
-  for (const key in params) {
-    const flag = params[key]
-    console.log(`${flag.aliases.join(", ").padStart(3)}: ${flag.description}`)
-  }
+  console.log(`Usage: ${description}`)
+  const entries = [
+    { aliases: ["dir"], description: "Path to testing dirrectory"},
+    ...Object.values(params)
+  ]
+
+  // строка вида "-h, --help"
+  const flagStrings = entries.map(f => f.aliases.join(", "))
+  const maxLen = Math.max(...flagStrings.map(s => s.length)) + 4
+
+  // печатаем, выравнивая по maxLen
+  flagStrings.forEach((str, i) => {
+    const padded = str.padEnd(maxLen)
+    console.log(`${padded} ${entries[i].description}`)
+  })
 }
 
 /**
