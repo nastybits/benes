@@ -1,4 +1,11 @@
 {
   "name": "js-benchmarks",
-  "type": "module"
+  "type": "module",
+  "scripts": {
+    "prepare": "husky"
+  },
+  "devDependencies": {
+    "commitizen": "^4.3.1",
+    "husky": "^9.1.7"
+  }
 }
