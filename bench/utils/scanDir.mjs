@@ -3,7 +3,7 @@ import { join, extname, basename } from "path"
 
 /**
  * Получает файлы в дирректории
- * @param {string} dir - Путь к дирректирии
+ * @param {string} dir - Путь к директории
  * @param {string} ext - Расширение файлов
  * @returns {Promise<{ dir: string, name: string, path: string, label: string }[]>}
  */
