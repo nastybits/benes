@@ -8,7 +8,7 @@ import { printProgress } from "./index.js"
  */
 function runOnce(file, engine) {
   return new Promise((resolve, reject) => {
-    const child = spawn(engine, [file], { stdio: ["ignore", "pipe", "inherit"] })
+    const child = spawn(engine, [file], { stdio: ["ignore", "pipe", "inherit"], shell: true })
     let output = ""
     child.stdout.on("data", c => (output += c))
     child.on("error", reject)
