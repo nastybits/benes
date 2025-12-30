@@ -4,7 +4,7 @@ import { parseArgs } from './core/parser.mjs'
 import { printResults, printHelp, generateUsage, printCrossEngineSummary, printDivider } from './core/print.mjs'
 import { FLAGS } from './params.mjs'
 
-const VERSION = '0.0.1'
+const VERSION = '0.0.3'
 
 async function main() {
   try {
