@@ -1,7 +1,7 @@
 /**
  * Generates usage string based on parameters
  * @param {Object} params - Object with command line parameters
- * @returns {string} String like "node ./src/index.mjs <dir> [-h] [-e S] [-r N] [-v]"
+ * @returns {string} String like "benes <file|dir> [-h] [-e S] [-r N] [-v]"
  */
 export function generateUsage(params) {
   const flags = Object.values(params)
@@ -21,7 +21,7 @@ export function generateUsage(params) {
     })
     .filter(Boolean)
 
-  return `node ./src/index.mjs <file|dir> ${flags.join(' ')}`
+  return `benes <file|dir> ${flags.join(' ')}`
 }
 
 /**

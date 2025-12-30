@@ -33,7 +33,7 @@ afterEach(() => {
 describe('generateUsage', () => {
   it('renders usage string with short flags', () => {
     const usage = generateUsage(SAMPLE_PARAMS)
-    expect(usage).toContain('node ./src/index.mjs <file|dir>')
+    expect(usage).toContain('benes <file|dir>')
     expect(usage).toContain('[-h]')
     expect(usage).toContain('[-r N]')
     expect(usage).toContain('[-e S]')
@@ -55,7 +55,7 @@ describe('generateUsage', () => {
 describe('printHelp', () => {
   it('prints usage and parameter list', () => {
     const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
-    const usage = 'node ./src/index.mjs <dir> [-h]'
+    const usage = 'benes <file|dir> [-h]'
 
     printHelp(SAMPLE_PARAMS, usage)
 
