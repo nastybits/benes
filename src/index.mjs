@@ -1,13 +1,10 @@
-import { readFileSync } from 'fs'
-import { createRequire } from 'module'
 import { scanDir } from './core/scanDir.mjs'
 import { benchFiles } from './core/bench.mjs'
 import { parseArgs } from './core/parser.mjs'
 import { printResults, printHelp, generateUsage, printCrossEngineSummary, printDivider } from './core/print.mjs'
 import { FLAGS } from './params.mjs'
 
-const require = createRequire(import.meta.url)
-const packageJson = require('../package.json')
+const VERSION = '0.0.1'
 
 async function main() {
   try {
@@ -16,7 +13,7 @@ async function main() {
 
     // Handle version flag
     if (flags.version) {
-      console.log(packageJson.version)
+      console.log(VERSION)
       return
     }
 
