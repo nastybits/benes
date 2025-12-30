@@ -1,0 +1,5 @@
+export { bench } from './benchApi.mjs'
+export { getRandomInt } from './getRandomInt.mjs'
+export { getRandomStr } from './getRandomStr.mjs'
+export { makeRandomIntArray } from './makeRandomIntArray.mjs'
+export { makeRandomStrArray } from './makeRandomStrArray.mjs'

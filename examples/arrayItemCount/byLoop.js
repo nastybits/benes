@@ -1,6 +1,8 @@
+import { bench } from '../../src/utils/index.mjs'
+
 /**
- * Получения количества вхождений в массив arr по массиву ids.
- * Используется цикл for с условием.
+ * Count occurrences in array arr by array of ids.
+ * Uses for loop with condition.
  * @param {[{ID: number}]} arr
  * @param {[number]} ids
  * @returns {number}
@@ -27,7 +29,6 @@ for (let i = 0; i <= 1000; i++) {
   }
 }
 
-var start = performance.now()
+bench.start()
 var count = countByLoop(arr, ids)
-
-console.log(performance.now() - start)
+bench.end()

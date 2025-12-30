@@ -1,13 +1,78 @@
 {
-  "name": "js-benchmarks",
+  "name": "benes",
+  "version": "0.0.1",
+  "description": "Cross-engine benchmark runner for comparing JavaScript implementations across V8, SpiderMonkey, JavaScriptCore and more",
   "type": "module",
+  "keywords": [
+    "benchmark",
+    "performance",
+    "cross-engine",
+    "multi-engine",
+    "javascript",
+    "v8",
+    "spidermonkey",
+    "javascriptcore",
+    "graaljs",
+    "quickjs",
+    "hermes",
+    "testing",
+    "cli"
+  ],
   "scripts": {
-    "prepare": "husky"
+    "bench": "node src/index.mjs",
+    "build:esm": "esbuild src/index.mjs --bundle --platform=node --format=esm --minify --legal-comments=none --banner:js=\"#!/usr/bin/env node\" --outfile=dist/cli.mjs",
+    "build:cjs": "esbuild src/index.mjs --bundle --platform=node --format=cjs --minify --legal-comments=none --banner:js=\"#!/usr/bin/env node\" --outfile=dist/cli.cjs",
+    "build": "npm run build:esm && npm run build:cjs",
+    "prepare": "husky",
+    "prepublishOnly": "npm test && npm run build",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "lint-staged": "lint-staged"
   },
+  "bin": {
+    "benes": "dist/cli.mjs"
+  },
+  "main": "./dist/cli.cjs",
+  "module": "./dist/cli.mjs",
+  "files": [
+    "dist/**/*",
+    "src/utils/*.mjs",
+    "README.md",
+    "LICENSE"
+  ],
+  "exports": {
+    ".": {
+      "import": "./dist/cli.mjs",
+      "require": "./dist/cli.cjs"
+    },
+    "./utils": {
+      "import": "./src/utils/index.mjs"
+    },
+    "./package.json": "./package.json"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nastybits/benes.git"
+  },
+  "bugs": {
+    "url": "https://github.com/nastybits/benes/issues"
+  },
+  "homepage": "https://github.com/nastybits/benes#readme",
+  "author": "nastybits",
+  "license": "MIT",
   "devDependencies": {
+    "@vitest/coverage-v8": "^4.0.16",
     "commitizen": "^4.3.1",
     "cz-conventional-changelog": "^3.3.0",
-    "husky": "^9.1.7"
+    "esbuild": "^0.25.9",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.2.7",
+    "prettier": "^3.7.4",
+    "vitest": "^4.0.15"
   },
   "config": {
     "commitizen": {

@@ -1,12 +1,14 @@
+import { bench } from '../../src/utils/index.mjs'
+
 /**
- * Получения количества вхождений в массив arr по массиву ids.
- * Используется метод filter + lenght.
+ * Count occurrences in array arr by array of ids.
+ * Uses filter + length method.
  * @param {[{ID: number}]} arr
  * @param {[number]} ids
  * @returns {number}
  */
 function countByFilter(arr, ids) {
-  return arr.filter(el => ids.includes(el.ID)).length
+  return arr.filter((el) => ids.includes(el.ID)).length
 }
 
 var arr = []
@@ -19,7 +21,6 @@ for (let i = 0; i <= 1000; i++) {
   }
 }
 
-var start = performance.now()
+bench.start()
 var count = countByFilter(arr, ids)
-
-console.log(performance.now() - start)
+bench.end()
