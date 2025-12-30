@@ -1,6 +1,7 @@
 .DS_Store
 node_modules
 /dist
+/coverage
 
 # local env files
 .env.local
@@ -20,3 +21,7 @@ yarn-error.log*
 *.sln
 *.sw*
 np
+
+# AI assistant files
+AGENTS.md
+CLAUDE.md
