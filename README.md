@@ -27,19 +27,9 @@ Tests run on a "clean" engine, which minimizes the impact of the environment on 
 
 Make sure you have [Node.js](https://nodejs.org/en) v18+ installed
 
-### Global Installation
+### Recommended: Local Installation (Project Dependency)
 
-```bash
-npm install -g benes
-```
-
-After installation, use the `benes` command anywhere:
-
-```bash
-benes <file|dir> [-h] [-V] [-e S] [-r N] [-t N] [-p N] [-v]
-```
-
-### Local Installation (Project Dependency)
+**Install locally to use both the CLI and the benchmark API in your tests:**
 
 ```bash
 npm install --save-dev benes
@@ -58,6 +48,28 @@ npx benes <file|dir> [-h] [-V] [-e S] [-r N] [-t N] [-p N] [-v]
 # Then run:
 npm run bench -- <file|dir> [flags]
 ```
+
+In your test files, import the API:
+
+```javascript
+import { bench, makeRandomIntArray } from 'benes/utils'
+```
+
+### Global Installation (CLI Only)
+
+**For CLI-only usage without writing tests in your project:**
+
+```bash
+npm install -g benes
+```
+
+After installation, use the `benes` command anywhere:
+
+```bash
+benes <file|dir> [-h] [-V] [-e S] [-r N] [-t N] [-p N] [-v]
+```
+
+**Note:** Global installation provides the CLI command but **does not allow importing the benchmark API** in your code. For writing tests that use `bench.start()`, `bench.end()`, and utility functions, you must install benes locally as a dev dependency.
 
 ### Optional: Other JavaScript Engines
 
@@ -88,7 +100,8 @@ dir              # Directory with test files (required positional argument)
 Each test file must follow this structure:
 
 ```javascript
-import { bench } from '../../src/utils/index.mjs'
+// Import from 'benes/utils' if installed locally
+import { bench } from 'benes/utils'
 
 // 1. Define the function to test
 function functionToTest(data) {
@@ -117,11 +130,17 @@ The `bench` utility provides a simple API for measuring execution time:
 
 This API handles all timing logic internally and ensures correct output format. It uses `performance.now()` when available and falls back to `Date.now()` when it is not.
 
+**Important:** To use the `bench` API, you must install `benes` locally in your project:
+
+```bash
+npm install --save-dev benes
+```
+
 ### Important Rules
 
 ✅ **DO:**
 
-- Import `bench` from `../../src/utils/index.mjs`
+- Import `bench` from `'benes/utils'` (requires local installation)
 - Call `bench.start()` before the code to measure
 - Call `bench.end()` after the code to measure
 - Keep test logic simple and focused
@@ -136,7 +155,7 @@ This API handles all timing logic internally and ensures correct output format. 
 
 ```javascript
 // /tests/arrayItemCount/byFilter.js
-import { bench } from '../../src/utils/index.mjs'
+import { bench } from 'benes/utils'
 
 function countByFilter(arr, ids) {
   return arr.filter((el) => ids.includes(el.ID)).length
@@ -163,8 +182,16 @@ The project provides utility functions for generating test data and benchmarking
 
 **Note:** The `bench` API and utility functions are only available as ES modules. Make sure your test files use `.mjs` extension or have `"type": "module"` in package.json.
 
+**Important:** Install `benes` locally to use these utilities:
+
+```bash
+npm install --save-dev benes
+```
+
+Then in your test files:
+
 ```javascript
-import { bench, makeRandomIntArray, makeRandomStrArray } from '../../src/utils/index.mjs'
+import { bench, makeRandomIntArray, makeRandomStrArray } from 'benes/utils'
 
 // Generate array of 10000 random integers between 0-1000
 var numbers = makeRandomIntArray(10000, 0, 1000)
@@ -224,7 +251,7 @@ The benchmark runner will extract the timing from the `__BENCH__:` prefix automa
 The benchmark system uses a special `__BENCH__:` prefix to identify timing output, which means **you can freely use `console.log()` for debugging** without interfering with results:
 
 ```javascript
-import { bench } from '../../src/utils/index.mjs'
+import { bench } from 'benes/utils'
 
 function countByFilter(arr, ids) {
   return arr.filter((el) => ids.includes(el.ID)).length
@@ -325,7 +352,7 @@ When testing with multiple engines, results are shown separately for each:
 npm run bench -- ./tests/arrayItemCount -e v8,node,spidermonkey -r 100 -p 3
 ```
 
-```bash
+```
 ======================== Engine: V8 ========================
 byFilter: 100% (100/100)
 byLoop: 100% (100/100)
@@ -361,7 +388,7 @@ This allows easy comparison of how different implementations perform across vari
 
 The CLI also prints per-test tables (rows: engines, columns: metrics) and a final summary table with X slower values per engine:
 
-```bash
+```
 Test: byLoop
 ┌──────────┬─────────┬────────┬───────────┬─────────────┬──────────┐
 │ (index)  │ Average │ Median │ Delta avg │ Delta median│ X slower │
