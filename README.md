@@ -25,17 +25,15 @@ Tests run on a "clean" engine, which minimizes the impact of the environment on 
 
 ## Installation
 
-Make sure you have [Node.js](https://nodejs.org/en) v18+ installed
+Make sure you have [Node.js](https://nodejs.org/en) v18+ installed.
 
-### Recommended: Local Installation (Project Dependency)
-
-**Install locally to use both the CLI and the benchmark API in your tests:**
+Install benes in your project:
 
 ```bash
 npm install --save-dev benes
 ```
 
-Then run via npm scripts or npx:
+Run via npm scripts or npx:
 
 ```bash
 # Via npx
@@ -54,22 +52,6 @@ In your test files, import the API:
 ```javascript
 import { bench, makeRandomIntArray } from 'benes/utils'
 ```
-
-### Global Installation (CLI Only)
-
-**For CLI-only usage without writing tests in your project:**
-
-```bash
-npm install -g benes
-```
-
-After installation, use the `benes` command anywhere:
-
-```bash
-benes <file|dir> [-h] [-V] [-e S] [-r N] [-t N] [-p N] [-v]
-```
-
-**Note:** Global installation provides the CLI command but **does not allow importing the benchmark API** in your code. For writing tests that use `bench.start()`, `bench.end()`, and utility functions, you must install benes locally as a dev dependency.
 
 ### Optional: Other JavaScript Engines
 
@@ -130,17 +112,11 @@ The `bench` utility provides a simple API for measuring execution time:
 
 This API handles all timing logic internally and ensures correct output format. It uses `performance.now()` when available and falls back to `Date.now()` when it is not.
 
-**Important:** To use the `bench` API, you must install `benes` locally in your project:
-
-```bash
-npm install --save-dev benes
-```
-
 ### Important Rules
 
 ✅ **DO:**
 
-- Import `bench` from `'benes/utils'` (requires local installation)
+- Import `bench` from `'benes/utils'`
 - Call `bench.start()` before the code to measure
 - Call `bench.end()` after the code to measure
 - Keep test logic simple and focused
@@ -181,14 +157,6 @@ bench.end()
 The project provides utility functions for generating test data and benchmarking.
 
 **Note:** The `bench` API and utility functions are only available as ES modules. Make sure your test files use `.mjs` extension or have `"type": "module"` in package.json.
-
-**Important:** Install `benes` locally to use these utilities:
-
-```bash
-npm install --save-dev benes
-```
-
-Then in your test files:
 
 ```javascript
 import { bench, makeRandomIntArray, makeRandomStrArray } from 'benes/utils'
@@ -413,29 +381,6 @@ Cross-engine summary (median and X slower):
 │ byFilter │ 0.147 (1.2)│ 0.120 (1.0)│
 └──────────┴────────────┴────────────┘
 ```
-
-## Advanced: V8 Bytecode Analysis
-
-If you have V8 installed, you can inspect bytecode for any file or function:
-
-```bash
-# Print bytecode of a file to console
-v8 --print-bytecode <file>
-```
-
-### Filters
-
-```bash
-# Print bytecode with filtering
-v8 --print-bytecode <file> --print-bytecode-filter=[param]
-```
-
-Filter parameters:
-
-- `*` - Print bytecode for everything
-- `""` - Print bytecode only for global scope code
-- `-` - Print bytecode only for non-global scope code
-- `doSomething` - Print bytecode only for function "doSomething"
 
 ## Contributing
 
