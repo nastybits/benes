@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [0.0.4](https://github.com/nastybits/benes/compare/v0.0.3...v0.0.4) (2025-12-31)
+
+### Features
+
+- new readme.md docs, new paradigm ([efaecf9](https://github.com/nastybits/benes/commit/efaecf9c9ffdf26decb4d9c9770a53479d086ca2))
+
 ## [0.0.3](https://github.com/nastybits/benes/compare/v0.0.1...v0.0.3) (2025-12-30)
 
 ### Bug Fixes

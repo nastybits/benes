@@ -25,27 +25,15 @@ Tests run on a "clean" engine, which minimizes the impact of the environment on 
 
 ## Installation
 
-Make sure you have [Node.js](https://nodejs.org/en) v18+ installed
+Make sure you have [Node.js](https://nodejs.org/en) v18+ installed.
 
-### Global Installation
-
-```bash
-npm install -g benes
-```
-
-After installation, use the `benes` command anywhere:
-
-```bash
-benes <file|dir> [-h] [-V] [-e S] [-r N] [-t N] [-p N] [-v]
-```
-
-### Local Installation (Project Dependency)
+Install benes in your project:
 
 ```bash
 npm install --save-dev benes
 ```
 
-Then run via npm scripts or npx:
+Run via npm scripts or npx:
 
 ```bash
 # Via npx
@@ -57,6 +45,12 @@ npx benes <file|dir> [-h] [-V] [-e S] [-r N] [-t N] [-p N] [-v]
 # }
 # Then run:
 npm run bench -- <file|dir> [flags]
+```
+
+In your test files, import the API:
+
+```javascript
+import { bench, makeRandomIntArray } from 'benes/utils'
 ```
 
 ### Optional: Other JavaScript Engines
@@ -88,7 +82,8 @@ dir              # Directory with test files (required positional argument)
 Each test file must follow this structure:
 
 ```javascript
-import { bench } from '../../src/utils/index.mjs'
+// Import from 'benes/utils' if installed locally
+import { bench } from 'benes/utils'
 
 // 1. Define the function to test
 function functionToTest(data) {
@@ -121,7 +116,7 @@ This API handles all timing logic internally and ensures correct output format. 
 
 ✅ **DO:**
 
-- Import `bench` from `../../src/utils/index.mjs`
+- Import `bench` from `'benes/utils'`
 - Call `bench.start()` before the code to measure
 - Call `bench.end()` after the code to measure
 - Keep test logic simple and focused
@@ -136,7 +131,7 @@ This API handles all timing logic internally and ensures correct output format. 
 
 ```javascript
 // /tests/arrayItemCount/byFilter.js
-import { bench } from '../../src/utils/index.mjs'
+import { bench } from 'benes/utils'
 
 function countByFilter(arr, ids) {
   return arr.filter((el) => ids.includes(el.ID)).length
@@ -164,7 +159,7 @@ The project provides utility functions for generating test data and benchmarking
 **Note:** The `bench` API and utility functions are only available as ES modules. Make sure your test files use `.mjs` extension or have `"type": "module"` in package.json.
 
 ```javascript
-import { bench, makeRandomIntArray, makeRandomStrArray } from '../../src/utils/index.mjs'
+import { bench, makeRandomIntArray, makeRandomStrArray } from 'benes/utils'
 
 // Generate array of 10000 random integers between 0-1000
 var numbers = makeRandomIntArray(10000, 0, 1000)
@@ -224,7 +219,7 @@ The benchmark runner will extract the timing from the `__BENCH__:` prefix automa
 The benchmark system uses a special `__BENCH__:` prefix to identify timing output, which means **you can freely use `console.log()` for debugging** without interfering with results:
 
 ```javascript
-import { bench } from '../../src/utils/index.mjs'
+import { bench } from 'benes/utils'
 
 function countByFilter(arr, ids) {
   return arr.filter((el) => ids.includes(el.ID)).length
@@ -325,7 +320,7 @@ When testing with multiple engines, results are shown separately for each:
 npm run bench -- ./tests/arrayItemCount -e v8,node,spidermonkey -r 100 -p 3
 ```
 
-```bash
+```
 ======================== Engine: V8 ========================
 byFilter: 100% (100/100)
 byLoop: 100% (100/100)
@@ -361,7 +356,7 @@ This allows easy comparison of how different implementations perform across vari
 
 The CLI also prints per-test tables (rows: engines, columns: metrics) and a final summary table with X slower values per engine:
 
-```bash
+```
 Test: byLoop
 ┌──────────┬─────────┬────────┬───────────┬─────────────┬──────────┐
 │ (index)  │ Average │ Median │ Delta avg │ Delta median│ X slower │
@@ -386,29 +381,6 @@ Cross-engine summary (median and X slower):
 │ byFilter │ 0.147 (1.2)│ 0.120 (1.0)│
 └──────────┴────────────┴────────────┘
 ```
-
-## Advanced: V8 Bytecode Analysis
-
-If you have V8 installed, you can inspect bytecode for any file or function:
-
-```bash
-# Print bytecode of a file to console
-v8 --print-bytecode <file>
-```
-
-### Filters
-
-```bash
-# Print bytecode with filtering
-v8 --print-bytecode <file> --print-bytecode-filter=[param]
-```
-
-Filter parameters:
-
-- `*` - Print bytecode for everything
-- `""` - Print bytecode only for global scope code
-- `-` - Print bytecode only for non-global scope code
-- `doSomething` - Print bytecode only for function "doSomething"
 
 ## Contributing
 
