@@ -4,13 +4,13 @@ This directory contains example benchmark tests for the `benes` project.
 
 ## Important Note
 
-These examples use relative imports:
+ES module examples use relative imports:
 
 ```javascript
 import { bench } from '../../src/utils/index.mjs'
 ```
 
-This is **correct for development** within the benes repository itself.
+This is **correct for development** within the benes repository itself. CommonJS examples print `__BENCH__:` manually.
 
 ## For Your Own Projects
 
@@ -32,13 +32,13 @@ From the benes repository root:
 
 ```bash
 # Run with Node.js
-benes ./examples/arrayItemCount
+node src/index.mjs ./examples/arrayItemCount
 
 # Run with V8
-benes ./examples/arrayItemCount -e v8
+node src/index.mjs ./examples/arrayItemCount -e v8
 
 # Compare multiple engines
-benes ./examples/arrayItemCount -e node,v8
+node src/index.mjs ./examples/arrayItemCount -e node,v8
 ```
 
 ## Creating Your Own Benchmarks
