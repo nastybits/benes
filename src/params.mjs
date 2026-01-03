@@ -27,7 +27,7 @@ export const FLAGS = Object.freeze({
     multiple: true,
     separator: ',',
     description: 'Name of JS Engine(s) to use (comma-separated for multiple)',
-    options: ['node', 'v8', 'spidermonkey', 'javascriptcore', 'graaljs', 'quickjs', 'hermes', 'xs'],
+    options: ['node', 'bun', 'v8', 'spidermonkey', 'javascriptcore', 'graaljs', 'quickjs', 'hermes', 'xs'],
     validate: function (e) {
       return this.options.includes(e)
     }

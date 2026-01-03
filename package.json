@@ -1,7 +1,7 @@
 {
   "name": "benes",
-  "version": "0.0.4",
-  "description": "Cross-engine benchmark runner for comparing JavaScript implementations across V8, SpiderMonkey, JavaScriptCore and more",
+  "version": "0.0.5",
+  "description": "Cross-engine benchmark runner for comparing JavaScript implementations across Node, Bun, V8, SpiderMonkey, JavaScriptCore and more",
   "type": "module",
   "keywords": [
     "benchmark",
@@ -9,6 +9,8 @@
     "cross-engine",
     "multi-engine",
     "javascript",
+    "node",
+    "bun",
     "v8",
     "spidermonkey",
     "javascriptcore",

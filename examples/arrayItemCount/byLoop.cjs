@@ -1,5 +1,3 @@
-import { bench } from '../../src/utils/index.mjs'
-
 /**
  * Count occurrences in array arr by array of ids.
  * Uses for loop with condition.
@@ -21,6 +19,12 @@ function countByLoop(arr, ids) {
 
 var arr = []
 var ids = []
+const nowMs = () => {
+  if (globalThis.performance && typeof globalThis.performance.now === 'function') {
+    return globalThis.performance.now()
+  }
+  return Date.now()
+}
 
 for (let i = 0; i <= 1000; i++) {
   arr.push({ ID: i })
@@ -29,6 +33,7 @@ for (let i = 0; i <= 1000; i++) {
   }
 }
 
-bench.start()
+var start = nowMs()
 var count = countByLoop(arr, ids)
-bench.end()
+var elapsed = nowMs() - start
+console.log('__BENCH__:' + elapsed)

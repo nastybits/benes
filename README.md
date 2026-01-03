@@ -10,18 +10,21 @@ Cross-engine benchmark runner for comparing JavaScript implementations
 
 ## Description
 
-A small CLI to benchmark JavaScript implementations across multiple engines using the same test files. It runs each file repeatedly, extracts a `__BENCH__:` timing line, and prints a comparison table. Requires [Node.js](https://nodejs.org/en) v18+.
+CLI for benchmarking JavaScript implementations across multiple engines using the same test files. It runs each file repeatedly, extracts a `__BENCH__:` timing line, and prints a comparison table. Requires [Node.js](https://nodejs.org/en) v18+.
 
-By default, tests run on Node.js. For multi-engine runs (V8, SpiderMonkey, JavaScriptCore, etc.), install engines via [JSVU](https://github.com/GoogleChromeLabs/jsvu).
+Defaults to Node.js (V8).
+
+- Multi-engine runs require extra engines. Recommended install via [JSVU](https://github.com/GoogleChromeLabs/jsvu).
+- For Bun, install from [bun.sh](https://bun.sh).
+
+**NOTE:** Node.js uses V8, but standalone V8 is often faster because it avoids Node.js APIs and modules.
 
 ## Advantages
 
-- **Multi-engine by default**: run the same test files across Node, V8, SpiderMonkey, JavaScriptCore, and more (via JSVU).
-- **Engine-agnostic protocol**: a single `__BENCH__:` line is enough, no engine-specific APIs.
+- **Multi-engine support**: run the same test files across Node, Bun, V8, SpiderMonkey, JavaScriptCore, and more.
+- **Engine-agnostic protocol**: a single `__BENCH__:` line is enough.
 - **Simple CLI workflow**: drop files into a folder, run one command, get a clear comparison table.
-- **Minimal surface area**: no dependency on large benchmarking frameworks; works with plain ECMAScript files.
-
-Tests run on a "clean" engine, which minimizes the impact of the environment on execution speed.
+- **Minimal surface area**: no dependency on large benchmarking frameworks.
 
 ## Installation
 
@@ -47,25 +50,14 @@ npx benes <file|dir> [-h] [-V] [-e S] [-r N] [-t N] [-p N] [-v]
 npm run bench -- <file|dir> [flags]
 ```
 
-In your test files, import the API:
-
-```javascript
-import { bench, makeRandomIntArray } from 'benes/utils'
-```
-
-### Optional: Other JavaScript Engines
-
-If you want to compare performance across different engines (V8, SpiderMonkey, JavaScriptCore, etc.),
-install [JSVU](https://github.com/GoogleChromeLabs/jsvu):
-
 ### Parameters
 
 ```bash
 dir              # Directory with test files (required positional argument)
 -h, --help       # Show help message
 -e, --engine     # JS engine name (comma-separated for multiple), default: node
-                 # Options: node | v8 | spidermonkey | javascriptcore | graaljs | quickjs | hermes | xs
-                 # Note: Engines other than 'node' require JSVU installation
+                 # Options: node | bun | v8 | spidermonkey | javascriptcore | graaljs | quickjs | hermes | xs
+                 # Note: Engines other than 'node' require separate installation
 -r, --runs       # Number of runs, default: 100
 -t, --timeout    # Timeout per run in milliseconds, default: 5000
 -p, --precision  # Decimal places for time output, default: 5
@@ -82,25 +74,21 @@ dir              # Directory with test files (required positional argument)
 Each test file must follow this structure:
 
 ```javascript
-// Import from 'benes/utils' if installed locally
+// Import the API:
 import { bench } from 'benes/utils'
 
-// 1. Define the function to test
 function functionToTest(data) {
-  // Your implementation
   return result
 }
 
-// 2. Prepare test data
 var data = []
 for (let i = 0; i < 10000; i++) {
   data.push({ ID: i, name: `Item ${i}` })
 }
 
-// 3. Run the benchmark
-bench.start()
+bench.start() // Call before the code to measure
 var result = functionToTest(data)
-bench.end()
+bench.end() // Call after the code to measure
 ```
 
 ### The `bench` API
@@ -110,27 +98,11 @@ The `bench` utility provides a simple API for measuring execution time:
 - **`bench.start()`** - Starts the timer
 - **`bench.end()`** - Stops the timer and outputs the elapsed time in milliseconds
 
-This API handles all timing logic internally and ensures correct output format. It uses `performance.now()` when available and falls back to `Date.now()` when it is not.
+This API handles timing and output format. It uses `performance.now()` when available and falls back to `Date.now()` when it is not.
 
-### Important Rules
-
-✅ **DO:**
-
-- Import `bench` from `'benes/utils'`
-- Call `bench.start()` before the code to measure
-- Call `bench.end()` after the code to measure
-- Keep test logic simple and focused
-- Use `console.log()` freely for debugging - it won't interfere with benchmark results
-
-❌ **DON'T:**
-
-- Call `bench.start()` multiple times without `bench.end()`
-- Modify global state that affects subsequent runs
-
-### Example Test File
+### Sample Test File
 
 ```javascript
-// /tests/arrayItemCount/byFilter.js
 import { bench } from 'benes/utils'
 
 function countByFilter(arr, ids) {
@@ -178,7 +150,7 @@ Available utilities:
 - **`bench.start()`** - Start benchmark timer
 - **`bench.end()`** - End benchmark timer and output result
 - **`getRandomInt(min, max)`** - Random integer in range [min, max)
-- **`getRandomStr()`** - Random string (mixed characters)
+- **`getRandomStr()`** - Random string
 - **`makeRandomIntArray(length, min, max)`** - Array of random integers
 - **`makeRandomStrArray(length)`** - Array of random strings
 
@@ -216,7 +188,7 @@ The benchmark runner will extract the timing from the `__BENCH__:` prefix automa
 
 ### Debugging Tests
 
-The benchmark system uses a special `__BENCH__:` prefix to identify timing output, which means **you can freely use `console.log()` for debugging** without interfering with results:
+The benchmark system uses the `__BENCH__:` prefix for timing output, so `console.log()` for debugging is safe:
 
 ```javascript
 import { bench } from 'benes/utils'
@@ -249,7 +221,7 @@ console.log('Result:', count) // This won't break anything
 When you run the test directly with an engine, you'll see all debug output:
 
 ```bash
-v8 --module tests/arrayItemCount/byFilter.js
+v8 --module path/to/your/test.mjs
 ```
 
 Output:
@@ -261,26 +233,23 @@ __BENCH__:0.181
 Result: 334
 ```
 
-### Examples
+### Common CLI Usage
 
 ```bash
 # Run with V8 engine and detailed output
-benes ./tests/arrayItemCount -e v8 -r 10 -p 5 -v
+npx benes ./your-benchmarks -e v8 -r 10 -p 5 -v
 
 # Run with Node.js (doesn't require JSVU)
-benes ./tests/arrayItemCount -e node -r 10 -p 5
+npx benes ./your-benchmarks -e node -r 10 -p 5
 
 # Brief output (default)
-benes ./tests/arrayItemCount -e node -r 100
+npx benes ./your-benchmarks -e node -r 100
 
 # Compare multiple engines
-benes ./tests/arrayItemCount -e v8,node,spidermonkey -r 100
+npx benes ./your-benchmarks -e v8,node,spidermonkey -r 100
 
 # Show help
-benes -h
-
-# Direct usage (without npm)
-node src/index.mjs ./tests/arrayItemCount -e v8,node -r 100
+npx benes -h
 ```
 
 ### Output Format
@@ -288,7 +257,7 @@ node src/index.mjs ./tests/arrayItemCount -e v8,node -r 100
 Example command and console output:
 
 ```bash
-benes ./tests/arrayItemCount -r 100
+npx benes ./your-benchmarks -r 100
 ```
 
 ```
@@ -317,7 +286,7 @@ Results are sorted by execution time (fastest first).
 When testing with multiple engines, results are shown separately for each:
 
 ```bash
-npm run bench -- ./tests/arrayItemCount -e v8,node,spidermonkey -r 100 -p 3
+npx benes ./your-benchmarks -e v8,node,spidermonkey -r 100 -p 3
 ```
 
 ```
@@ -352,9 +321,7 @@ byLoop: 100% (100/100)
 └──────────┴─────────┴────────┴───────────┴─────────────┴──────────┘
 ```
 
-This allows easy comparison of how different implementations perform across various JavaScript engines.
-
-The CLI also prints per-test tables (rows: engines, columns: metrics) and a final summary table with X slower values per engine:
+This allows easy comparison across engines. The CLI also prints per-test tables and a final summary table with X slower values per engine:
 
 ```
 Test: byLoop
