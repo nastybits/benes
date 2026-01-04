@@ -26,11 +26,7 @@ export const FLAGS = Object.freeze({
     default: 'node',
     multiple: true,
     separator: ',',
-    description: 'Name of JS Engine(s) to use (comma-separated for multiple)',
-    options: ['node', 'bun', 'v8', 'spidermonkey', 'javascriptcore', 'graaljs', 'quickjs', 'hermes', 'xs'],
-    validate: function (e) {
-      return this.options.includes(e)
-    }
+    description: 'Name of JS Engine(s) to use (comma-separated for multiple)'
   },
   runs: {
     aliases: ['-r', '--runs'],

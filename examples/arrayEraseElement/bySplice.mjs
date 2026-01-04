@@ -15,12 +15,12 @@ function getElementBySplice(arr, id) {
   return arr
 }
 
-var arr = []
-
-for (let i = 0; i <= 10000; i++) {
-  arr.push({ ID: i })
+function makeArr() {
+  var arr = []
+  for (let i = 0; i <= 10000; i++) {
+    arr.push({ ID: i })
+  }
+  return arr
 }
 
-bench.start()
-var r = getElementBySplice(arr, 5)
-bench.end()
+bench.run(() => getElementBySplice(makeArr(), 5), { warmup: 5, runs: 20 })
