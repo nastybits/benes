@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [0.0.6](https://github.com/nastybits/benes/compare/v0.0.5...v0.0.6) (2026-01-04)
+
+### Features
+
+- **bun:** add bun support ([2e812cc](https://github.com/nastybits/benes/commit/2e812cc8796bc5914f5856f43ae0217599862437))
+
 ## [0.0.5](https://github.com/nastybits/benes/compare/v0.0.4...v0.0.5) (2026-01-03)
 
 ### Features
