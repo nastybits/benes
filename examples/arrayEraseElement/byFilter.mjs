@@ -11,12 +11,12 @@ function getElementByFilter(arr, id) {
   return arr.filter((el) => el.ID !== id)
 }
 
-var arr = []
-
-for (let i = 0; i <= 10000; i++) {
-  arr.push({ ID: i })
+function makeArr() {
+  var arr = []
+  for (let i = 0; i <= 10000; i++) {
+    arr.push({ ID: i })
+  }
+  return arr
 }
 
-bench.start()
-var r = getElementByFilter(arr, 5)
-bench.end()
+bench.run(() => getElementByFilter(makeArr(), 5), { warmup: 5, runs: 20 })

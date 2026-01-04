@@ -14,7 +14,7 @@ const TIMEOUT = 5_000
 function runOnce(file, engine, timeout = TIMEOUT) {
   return new Promise((resolve, reject) => {
     // Prepare engine arguments
-    // Most engines need --module flag for ESM support
+    // Some engines need --module flag for ESM support
     // Node.js and Bun handle ESM natively without flags
     const needsModuleFlag = !['node', 'bun'].includes(engine)
     const args = needsModuleFlag ? ['--module', file] : [file]
@@ -32,15 +32,7 @@ function runOnce(file, engine, timeout = TIMEOUT) {
 
     child.on('error', (err) => {
       if (err.code === 'ENOENT') {
-        let installMessage
-        if (engine === 'node') {
-          installMessage = 'Make sure Node.js is installed and available in PATH.'
-        } else if (engine === 'bun') {
-          installMessage = 'Install Bun: https://bun.sh'
-        } else {
-          installMessage = `Install '${engine}' via JSVU: https://github.com/GoogleChromeLabs/jsvu`
-        }
-
+        const installMessage = 'Install the engine and ensure it is available in PATH.'
         return reject(new Error(`Engine '${engine}' not found.\n${installMessage}`))
       }
       reject(err)
@@ -48,7 +40,7 @@ function runOnce(file, engine, timeout = TIMEOUT) {
 
     child.on('close', (code) => {
       if (code !== 0) {
-        const errorMessage = errorOutput.trim() ? `\n${errorOutput.trim()}` : ''
+        const errorMessage = errorOutput ? `\n${errorOutput.trim()}` : ''
         return reject(new Error(`${engine} exited with code ${code}${errorMessage}`))
       }
 

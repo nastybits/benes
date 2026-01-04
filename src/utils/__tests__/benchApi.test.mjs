@@ -35,4 +35,29 @@ describe('bench', () => {
     // Restore
     globalThis.performance = originalPerformance
   })
+
+  it('bench.run logs average time and respects warmup', () => {
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
+    const fnSpy = vi.fn(() => 1)
+    const nowSpy = vi
+      .spyOn(performance, 'now')
+      .mockReturnValueOnce(0)
+      .mockReturnValueOnce(5)
+      .mockReturnValueOnce(10)
+      .mockReturnValueOnce(16)
+      .mockReturnValueOnce(20)
+      .mockReturnValueOnce(29)
+
+    bench.run(fnSpy, { warmup: 2, runs: 3 })
+
+    const avg = (5 + 6 + 9) / 3
+    expect(fnSpy).toHaveBeenCalledTimes(5)
+    expect(nowSpy).toHaveBeenCalledTimes(6)
+    expect(logSpy).toHaveBeenCalledWith(`__BENCH__:${avg}`)
+  })
+
+  it('bench.run throws on async functions', () => {
+    const fn = () => Promise.resolve()
+    expect(() => bench.run(fn)).toThrow('bench.run does not support async functions')
+  })
 })

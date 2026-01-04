@@ -10,14 +10,12 @@ Cross-engine benchmark runner for comparing JavaScript implementations
 
 ## Description
 
-CLI for benchmarking JavaScript implementations across multiple engines using the same test files. It runs each file repeatedly, extracts a `__BENCH__:` timing line, and prints a comparison table. Requires [Node.js](https://nodejs.org/en) v18+.
+CLI for benchmarking JavaScript implementations across multiple engines using the same test files. It runs each file repeatedly, extracts a `__BENCH__:` timing line, and prints a comparison table.
 
-Defaults to Node.js (V8).
+## Requirements
 
-- Multi-engine runs require extra engines. Recommended install via [JSVU](https://github.com/GoogleChromeLabs/jsvu).
-- For Bun, install from [bun.sh](https://bun.sh).
-
-**NOTE:** Node.js uses V8, but standalone V8 is often faster because it avoids Node.js APIs and modules.
+- Node.js v18+ or Bun v1.3+
+- **Optional**: Extra engines for multi-engine runs. (Recommended install via [JSVU](https://github.com/GoogleChromeLabs/jsvu))
 
 ## Advantages
 
@@ -28,13 +26,19 @@ Defaults to Node.js (V8).
 
 ## Installation
 
-Make sure you have [Node.js](https://nodejs.org/en) v18+ installed.
-
-Install benes in your project:
+Install benes with npm:
 
 ```bash
 npm install --save-dev benes
 ```
+
+Or with Bun:
+
+```bash
+bun add -d benes
+```
+
+## Usage
 
 Run via npm scripts or npx:
 
@@ -50,14 +54,22 @@ npx benes <file|dir> [-h] [-V] [-e S] [-r N] [-t N] [-p N] [-v]
 npm run bench -- <file|dir> [flags]
 ```
 
+Run via Bun:
+
+```bash
+# Via bunx
+bunx benes <file|dir> [-h] [-V] [-e S] [-r N] [-t N] [-p N] [-v]
+```
+
+Make sure the engine is installed and available in PATH.
+
 ### Parameters
 
 ```bash
 dir              # Directory with test files (required positional argument)
 -h, --help       # Show help message
 -e, --engine     # JS engine name (comma-separated for multiple), default: node
-                 # Options: node | bun | v8 | spidermonkey | javascriptcore | graaljs | quickjs | hermes | xs
-                 # Note: Engines other than 'node' require separate installation
+                 # Note: Make sure engine is installed and available in PATH.
 -r, --runs       # Number of runs, default: 100
 -t, --timeout    # Timeout per run in milliseconds, default: 5000
 -p, --precision  # Decimal places for time output, default: 5
@@ -145,10 +157,17 @@ var result = yourFunction(numbers)
 bench.end()
 ```
 
+For warmup runs inside a single process, use `bench.run`:
+
+```javascript
+bench.run(() => yourFunction(numbers), { warmup: 5, runs: 20 })
+```
+
 Available utilities:
 
 - **`bench.start()`** - Start benchmark timer
 - **`bench.end()`** - End benchmark timer and output result
+- **`bench.run(fn, { warmup, runs })`** - Warmup and measure average time in one process
 - **`getRandomInt(min, max)`** - Random integer in range [min, max)
 - **`getRandomStr()`** - Random string
 - **`makeRandomIntArray(length, min, max)`** - Array of random integers
